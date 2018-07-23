@@ -1,25 +1,17 @@
 import base64
+from six import StringIO, BytesIO
 import struct
-
-import matplotlib.pyplot as plt
 
 from matplotlib.artist import Artist
 from matplotlib.figure import Figure
 
-from pybloqs.html import append_to, parse
+import matplotlib.pyplot as plt
 from pybloqs.block.base import BaseBlock
 from pybloqs.block.convenience import add_block_types
-from pybloqs.util import cfg_to_css_string
+from pybloqs.html import append_to, parse
 from pybloqs.static import JScript, Css
+from pybloqs.util import cfg_to_css_string
 
-from six import StringIO, BytesIO
-
-
-# highcharts_exporting_csv_jscript = JScript("export-csv")
-# highcharts_pybloqs_jscript = JScript("highcharts-pybloqs")
-#
-# register_interactive(highstock_jscript,
-#                      highcharts_more_jscript,
 
 _MIME_TYPES = {
     "png": "png",
@@ -212,7 +204,7 @@ class PlotlyPlotBlock(BaseBlock):
                        It is also useful in case a styling parameter name clashes with a standard
                        block parameter.
         """
-        # Import are local so we do not need to install Plotly when it is not used
+        # Imports are local so we do not need to install Plotly when it is not used
         from plotly.graph_objs import Figure as PlotlyFigure
         import plotly.offline as po
 
@@ -241,7 +233,7 @@ class BokehPlotBlock(BaseBlock):
                        It is also useful in case a styling parameter name clashes with a standard
                        block parameter.
         """
-        # Import are local so we do not need to install Bokeh when it is not used
+        # Imports are local so we do not need to install Bokeh when it is not used
         from bokeh.resources import CSSResources, JSResources
         from bokeh.plotting.figure import Figure as BokehFigure
         from bokeh.embed.standalone import components

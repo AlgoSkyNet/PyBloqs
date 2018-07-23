@@ -1,12 +1,8 @@
-import itertools
+from pkg_resources import resource_filename
+from six import StringIO
 
 from pybloqs.html import js_elem, append_to, root, render
 from pybloqs.util import encode_string
-
-from pkg_resources import resource_filename
-
-
-from six import StringIO
 
 
 class Resource(object):
@@ -80,9 +76,6 @@ class JScript(Resource):
             stream.write("}")
 
             self._script_string = stream.getvalue()
-        elif self._encode:
-            self.write_compressed(stream, self._script_string)
-            self._script_string = stream.getvalue()
 
         return js_elem(parent, self._script_string)
 
@@ -98,9 +91,9 @@ class JScript(Resource):
 
 class Css(Resource):
     def __init__(self, name=None, tag_id=None,  css_string=None):
-        super(Css, self).__init__(name, ".css")
         if name is None and css_string is None:
             raise ValueError('Please specify either resource name or script_string')
+        super(Css, self).__init__(name, ".css")
         self._css_string = css_string
         self._tag_id = tag_id
 
@@ -125,23 +118,13 @@ class Css(Resource):
 
 class DependencyTracker(object):
     def __init__(self, *args):
-        self._deps = list(args)
         self._deps_set = set(args)
 
     def add(self, *resources):
-        for resource in resources:
-            if resource not in self._deps_set:
-                self._deps.append(resource)
-                self._deps_set.add(resource)
-
-    def any(self, type_filter=None):
-        if type_filter is None:
-            return len(self._deps) > 0
-
-        return any(itertools.imap(lambda res: isinstance(res, type_filter), self._deps))
+        self._deps_set = self._deps_set.union(resources)
 
     def __iter__(self):
-        return iter(self._deps)
+        return iter(self._deps_set)
 
 
 # JS deflation script and the reporting core functionality is always registered
